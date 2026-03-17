@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Internship Portal — Register</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg0:     #0b0f1a;
+    --bg1:     #111827;
+    --bg2:     #1c2333;
+    --glass:   rgba(255,255,255,0.04);
+    --border:  rgba(255,255,255,0.08);
+    --accent:  #f0b429;
+    --accent2: #e8830a;
+    --text:    #e8e6df;
+    --muted:   #8b8f9e;
+    --green:   #34d399;
+    --red:     #f87171;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg0);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── animated background ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(240,180,41,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 80% 80%, rgba(232,131,10,0.06) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── grid texture ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+  }
+
+  /* ── LEFT PANEL ── */
+  .left-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 56px;
+    border-right: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(240,180,41,0.1);
+    border: 1px solid rgba(240,180,41,0.25);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-bottom: 28px;
+    width: fit-content;
+  }
+  .badge-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  .left-panel h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 3.5vw, 3.2rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+  .left-panel h1 em {
+    font-style: normal;
+    color: var(--accent);
+    position: relative;
+  }
+  .left-panel h1 em::after {
+    content: '';
+    position: absolute;
+    bottom: 2px; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    border-radius: 2px;
+  }
+
+  .left-panel p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    max-width: 340px;
+    margin-bottom: 40px;
+  }
+
+  .features {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .feature {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+  .feature-icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .left-divider {
+    width: 48px; height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    margin: 36px 0;
+    border-radius: 2px;
+  }
+
+  .step-indicator {
+    display: flex;
+    gap: 6px;
+  }
+  .step-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+    transition: all 0.3s;
+  }
+  .step-dot.active { background: var(--accent); width: 22px; border-radius: 4px; }
+
+  /* ── RIGHT PANEL (form) ── */
+  .right-panel {
+    padding: 48px 52px;
+    overflow-y: auto;
+  }
+
+  .form-header {
+    margin-bottom: 36px;
+  }
+  .form-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .form-header p {
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+
+  /* section */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 28px 0 16px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  /* field */
+  .field { display: flex; flex-direction: column; gap: 6px; }
+
+  label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+  }
+
+  .input-wrap { position: relative; }
+
+  input, select {
+    width: 100%;
+    padding: 11px 14px;
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    
+  }
+  input::placeholder { color: rgba(139,143,158,0.5); }
+  select option { background: var(--bg1); color: var(--text); }
+
+  input:focus, select:focus {
+    border-color: rgba(240,180,41,0.5);
+    background: rgba(255,255,255,0.06);
+    box-shadow: 0 0 0 3px rgba(240,180,41,0.08);
+  }
+  input.valid   { border-color: rgba(52,211,153,0.5); }
+  input.invalid { border-color: rgba(248,113,113,0.5); }
+
+  .error-msg {
+    font-size: 0.75rem;
+    color: var(--red);
+    min-height: 14px;
+  }
+  .hint {
+    font-size: 0.72rem;
+    color: rgba(139,143,158,0.6);
+  }
+
+  /* password bar */
+  .pw-row { display: flex; gap: 4px; margin-top: 6px; }
+  .pw-seg {
+    flex: 1; height: 3px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.07);
+    transition: background 0.3s;
+  }
+  .pw-text {
+    font-size: 0.72rem; color: var(--muted);
+    display: flex; justify-content: space-between;
+    margin-top: 4px;
+  }
+
+  /* email status */
+  .email-status {
+    font-size: 0.76rem; min-height: 14px; margin-top: 3px;
+  }
+  .email-status.ok  { color: var(--green); }
+  .email-status.bad { color: var(--red); }
+
+  /* file upload */
+  .file-zone {
+    border: 1px dashed rgba(240,180,41,0.25);
+    border-radius: 10px;
+    padding: 18px;
+    text-align: center;
+    cursor: pointer;
+    background: rgba(240,180,41,0.03);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .file-zone:hover {
+    border-color: rgba(240,180,41,0.5);
+    background: rgba(240,180,41,0.06);
+  }
+  .file-zone-icon {
+    font-size: 22px; margin-bottom: 6px;
+  }
+  .file-zone p { font-size: 0.82rem; color: var(--muted); }
+  .file-zone strong { color: var(--accent); font-weight: 500; }
+  input[type="file"] { display: none; }
+
+  /* submit */
+  .btn-submit {
+    width: 100%;
+    margin-top: 28px;
+    padding: 14px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #0b0f1a;
+    border: none;
+    border-radius: 10px;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(240,180,41,0.2);
+  }
+  .btn-submit:hover {
+    opacity: 0.92;
+    box-shadow: 0 6px 28px rgba(240,180,41,0.35);
+  }
+  .btn-submit:active  { transform: scale(0.99); }
+  .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+
+  /* toast */
+  #toast {
+    display: none;
+    margin-top: 16px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  #toast.success {
+    background: rgba(52,211,153,0.08);
+    border: 1px solid rgba(52,211,153,0.25);
+    color: var(--green);
+  }
+  #toast.error {
+    background: rgba(248,113,113,0.08);
+    border: 1px solid rgba(248,113,113,0.25);
+    color: var(--red);
+  }
+
+  /* progress bar top */
+  .progress-bar {
+    position: fixed; top: 0; left: 0;
+    height: 3px; width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.4s ease;
+    z-index: 999;
+    border-radius: 0 2px 2px 0;
+  }
+
+  @media(max-width: 860px) {
+    .page { grid-template-columns: 1fr; }
+    .left-panel { position: static; height: auto; padding: 40px 28px 28px; border-right: none; border-bottom: 1px solid var(--border); }
+    .right-panel { padding: 32px 24px; }
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="page">
+
+  <!-- ── LEFT PANEL ── -->
+  <aside class="left-panel">
+    <div class="badge"><span class="badge-dot"></span> Now accepting applications</div>
+
+    <h1>Launch Your<br><em>Career</em> With<br>An Internship</h1>
+
+    <p>Apply to university-approved internship programs. Your information is secured with military-grade encryption and multi-layer validation.</p>
+
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">🔐</div>
+        <span>End-to-end secure data handling</span>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <span>Instant email availability check</span>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📄</div>
+        <span>PDF resume upload supported</span>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">✅</div>
+        <span>Real-time field validation</span>
+      </div>
+    </div>
+
+    <div class="left-divider"></div>
+
+    <div class="step-indicator" id="stepIndicator">
+      <div class="step-dot active"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+      <div class="step-dot"></div>
+    </div>
+  </aside>
+
+  <!-- ── RIGHT PANEL ── -->
+  <main class="right-panel">
+
+    <div class="form-header">
+      <h2>Create Your Account</h2>
+      <p>Fill in all fields carefully — details must match your university records.</p>
+    </div>
+
+    <form id="regForm" novalidate enctype="multipart/form-data">
+
+      <!-- Personal -->
+      <div class="section-label">Personal Info</div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label for="student_id">Student ID</label>
+          <input type="text" id="student_id" name="student_id" placeholder="FA21-BCS-001">
+          <span class="hint">Format: FA21-BCS-001</span>
+          <span class="error-msg" id="err_student_id"></span>
+        </div>
+        <div class="field">
+          <label for="full_name">Full Name</label>
+          <input type="text" id="full_name" name="full_name" placeholder="e.g. Ali Hassan">
+          <span class="error-msg" id="err_full_name"></span>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="ali@university.edu.pk">
+        <div class="email-status" id="email_status"></div>
+        <span class="error-msg" id="err_email"></span>
+      </div>
+
+      <!-- Security -->
+      <div class="section-label">Security</div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" placeholder="Min 8 characters">
+          <div class="pw-row">
+            <div class="pw-seg" id="seg1"></div>
+            <div class="pw-seg" id="seg2"></div>
+            <div class="pw-seg" id="seg3"></div>
+            <div class="pw-seg" id="seg4"></div>
+            <div class="pw-seg" id="seg5"></div>
+          </div>
+          <div class="pw-text"><span id="pw_label">Strength</span></div>
+          <span class="error-msg" id="err_password"></span>
+        </div>
+        <div class="field">
+          <label for="confirm_password">Confirm Password</label>
+          <input type="password" id="confirm_password" name="confirm_password" placeholder="Repeat password">
+          <span class="error-msg" id="err_confirm"></span>
+        </div>
+      </div>
+
+      <!-- Contact & Academic -->
+      <div class="section-label">Contact & Academic</div>
+
+      <div class="grid-2">
+        <div class="field">
+          <label for="cnic">CNIC Number</label>
+          <input type="text" id="cnic" name="cnic" placeholder="12345-1234567-1" maxlength="15">
+          <span class="error-msg" id="err_cnic"></span>
+        </div>
+        <div class="field">
+          <label for="phone">Phone Number</label>
+          <input type="text" id="phone" name="phone" placeholder="03001234567" maxlength="11">
+          <span class="error-msg" id="err_phone"></span>
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top:14px">
+        <div class="field">
+          <label for="cgpa">CGPA</label>
+          <input type="number" id="cgpa" name="cgpa" placeholder="e.g. 3.50" step="0.01" min="0" max="4">
+          <span class="hint">Range: 0.00 – 4.00</span>
+          <span class="error-msg" id="err_cgpa"></span>
+        </div>
+        <div class="field">
+          <label for="department">Department</label>
+          <select id="department" name="department">
+            <option value="">— Select Department —</option>
+            <option>BCS – Computer Science</option>
+            <option>BSE – Software Engineering</option>
+            <option>BIT – Information Technology</option>
+            <option>BEE – Electrical Engineering</option>
+            <option>BBA – Business Administration</option>
+          </select>
+          <span class="error-msg" id="err_department"></span>
+        </div>
+      </div>
+
+      <!-- Resume -->
+      <div class="section-label">Resume</div>
+
+      <div class="field">
+        <label for="resume">Upload Resume</label>
+        <label class="file-zone" for="resume">
+          <div class="file-zone-icon">📎</div>
+          <p id="file_name_display"><strong>Click to choose file</strong> or drag and drop</p>
+          <p style="font-size:0.72rem; margin-top:4px;">PDF only · Max 2MB</p>
+        </label>
+        <input type="file" id="resume" name="resume" accept=".pdf">
+        <span class="error-msg" id="err_resume"></span>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submitBtn">Submit Application →</button>
+
+      <div id="toast"></div>
+
+    </form>
+  </main>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+function setError(id, msg)  { $(id).textContent = msg; }
+function clearError(id)     { $(id).textContent = ''; }
+function markValid(el)      { el.classList.remove('invalid'); el.classList.add('valid'); }
+function markInvalid(el)    { el.classList.remove('valid'); el.classList.add('invalid'); }
+
+// progress bar tracking
+function updateProgress() {
+  const fields = ['student_id','full_name','email','password','confirm_password','cnic','phone','cgpa','department'];
+  const filled = fields.filter(id => $(id) && $(id).value.trim() !== '').length;
+  const resumeFilled = $('resume').files.length > 0 ? 1 : 0;
+  const total = fields.length + 1;
+  const pct = Math.round(((filled + resumeFilled) / total) * 100);
+  $('progressBar').style.width = pct + '%';
+
+  // update step dots
+  const dots = document.querySelectorAll('.step-dot');
+  dots.forEach(d => d.classList.remove('active'));
+  const activeIndex = pct < 25 ? 0 : pct < 50 ? 1 : pct < 80 ? 2 : 3;
+  dots[activeIndex].classList.add('active');
+}
+document.querySelectorAll('input, select').forEach(el => el.addEventListener('input', updateProgress));
+
+// ── Validators ──────────────────────────────────────────────
+function validateStudentID() {
+  const val = $('student_id').value.trim();
+  if (!val)                              { markInvalid($('student_id')); setError('err_student_id','Student ID is required.'); return false; }
+  if (!/^[A-Z]{2}\d{2}-[A-Z]{3}-\d{3}$/.test(val)) { markInvalid($('student_id')); setError('err_student_id','Format: FA21-BCS-001'); return false; }
+  markValid($('student_id')); clearError('err_student_id'); return true;
+}
+function validateName() {
+  const val = $('full_name').value.trim();
+  if (val.length < 3) { markInvalid($('full_name')); setError('err_full_name','Minimum 3 characters.'); return false; }
+  markValid($('full_name')); clearError('err_full_name'); return true;
+}
+function validateEmail() {
+  const val = $('email').value.trim();
+  if (!val)                          { markInvalid($('email')); setError('err_email','Email is required.'); return false; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) { markInvalid($('email')); setError('err_email','Invalid email format.'); return false; }
+  markValid($('email')); clearError('err_email'); return true;
+}
+
+// password strength — 5-segment bar
+const segColors = ['#f87171','#fb923c','#fbbf24','#34d399','#34d399'];
+const segLabels = ['Very Weak','Weak','Fair','Strong','Very Strong'];
+function measureStrength(pw) {
+  let s = 0;
+  if (pw.length >= 8)   s++;
+  if (/[A-Z]/.test(pw)) s++;
+  if (/[a-z]/.test(pw)) s++;
+  if (/\d/.test(pw))    s++;
+  if (/[\W_]/.test(pw)) s++;
+  return s;
+}
+function updatePwBar() {
+  const score = measureStrength($('password').value);
+  for (let i = 1; i <= 5; i++) {
+    const seg = $('seg' + i);
+    seg.style.background = i <= score ? segColors[score - 1] : 'rgba(255,255,255,0.07)';
+  }
+  $('pw_label').textContent = $('password').value ? segLabels[Math.max(0, score - 1)] : 'Strength';
+}
+function validatePassword() {
+  const val = $('password').value;
+  if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(val)) {
+    markInvalid($('password'));
+    setError('err_password','8+ chars, upper, lower, number & special char.');
+    return false;
+  }
+  markValid($('password')); clearError('err_password'); return true;
+}
+function validateConfirm() {
+  if ($('password').value !== $('confirm_password').value) {
+    markInvalid($('confirm_password')); setError('err_confirm','Passwords do not match.'); return false;
+  }
+  markValid($('confirm_password')); clearError('err_confirm'); return true;
+}
+function validateCNIC() {
+  if (!/^\d{5}-\d{7}-\d$/.test($('cnic').value.trim())) {
+    markInvalid($('cnic')); setError('err_cnic','Format: 12345-1234567-1'); return false;
+  }
+  markValid($('cnic')); clearError('err_cnic'); return true;
+}
+function validatePhone() {
+  if (!/^03\d{9}$/.test($('phone').value.trim())) {
+    markInvalid($('phone')); setError('err_phone','Format: 03XXXXXXXXX (11 digits)'); return false;
+  }
+  markValid($('phone')); clearError('err_phone'); return true;
+}
+function validateCGPA() {
+  const v = parseFloat($('cgpa').value);
+  if (isNaN(v) || v < 0 || v > 4) {
+    markInvalid($('cgpa')); setError('err_cgpa','Must be 0.00 – 4.00'); return false;
+  }
+  markValid($('cgpa')); clearError('err_cgpa'); return true;
+}
+function validateDept() {
+  if (!$('department').value) { setError('err_department','Please select a department.'); return false; }
+  clearError('err_department'); return true;
+}
+function validateResume() {
+  const file = $('resume').files[0];
+  if (!file)                        { setError('err_resume','Resume is required (PDF).'); return false; }
+  if (file.type !== 'application/pdf') { setError('err_resume','Only PDF files are accepted.'); return false; }
+  if (file.size > 2 * 1024 * 1024)    { setError('err_resume','File must be under 2MB.'); return false; }
+  clearError('err_resume'); return true;
+}
+
+// ── AJAX email check ─────────────────────────────────────────
+let emailTimer;
+$('email').addEventListener('input', () => {
+  clearTimeout(emailTimer);
+  const s = $('email_status');
+  s.textContent = ''; s.className = 'email-status';
+  emailTimer = setTimeout(() => {
+    if (!validateEmail()) return;
+    s.textContent = 'Checking availability…';
+    const fd = new FormData();
+    fd.append('email', $('email').value.trim());
+    fetch('check_email.php', { method: 'POST', body: fd })
+      .then(r => r.json())
+      .then(d => {
+        s.textContent = (d.available ? '✓ ' : '✗ ') + d.message;
+        s.className   = 'email-status ' + (d.available ? 'ok' : 'bad');
+      })
+      .catch(() => { s.textContent = 'Could not verify.'; });
+  }, 600);
+});
+
+// ── live events ──────────────────────────────────────────────
+$('student_id').addEventListener('blur', validateStudentID);
+$('full_name') .addEventListener('blur', validateName);
+$('password')  .addEventListener('input', () => { updatePwBar(); validatePassword(); });
+$('confirm_password').addEventListener('input', validateConfirm);
+$('cnic') .addEventListener('blur', validateCNIC);
+$('phone').addEventListener('blur', validatePhone);
+$('cgpa') .addEventListener('blur', validateCGPA);
+
+$('resume').addEventListener('change', () => {
+  const f = $('resume').files[0];
+  $('file_name_display').innerHTML = f
+    ? `<strong>${f.name}</strong>`
+    : '<strong>Click to choose file</strong> or drag and drop';
+  validateResume();
+});
+
+// ── submit ───────────────────────────────────────────────────
+$('regForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const valid =
+    validateStudentID() & validateName()    & validateEmail()  &
+    validatePassword()  & validateConfirm() & validateCNIC()   &
+    validatePhone()     & validateCGPA()    & validateDept()   &
+    validateResume();
+
+  if (!valid) { showToast('Please fix the highlighted errors.', 'error'); return; }
+
+  const btn = $('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+
+  fetch('register.php', { method: 'POST', body: new FormData($('regForm')) })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        showToast('🎉 ' + data.message, 'success');
+        $('regForm').reset();
+        document.querySelectorAll('input,select').forEach(el => { el.classList.remove('valid','invalid'); });
+        $('file_name_display').innerHTML = '<strong>Click to choose file</strong> or drag and drop';
+        for(let i=1;i<=5;i++) $('seg'+i).style.background='rgba(255,255,255,0.07)';
+        $('pw_label').textContent = 'Strength';
+        $('email_status').textContent = '';
+        $('progressBar').style.width = '0%';
+      } else {
+        const msgs = Array.isArray(data.errors) ? data.errors.join('\n') : data.message;
+        showToast(msgs, 'error');
+      }
+    })
+    .catch(() => showToast('Network error. Try again.', 'error'))
+    .finally(() => { btn.disabled = false; btn.textContent = 'Submit Application →'; });
+});
+
+function showToast(msg, type) {
+  const t = $('toast');
+  t.textContent = msg; t.className = type; t.style.display = 'block';
+  t.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+</script>
+</body>
+</html>
